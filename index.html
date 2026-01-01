@@ -25,7 +25,12 @@
     .glow {
       position: fixed;
       inset: -40%;
-      background: conic-gradient(from 180deg, rgba(255,80,120,.25), rgba(255,160,190,.15), rgba(255,80,120,.25));
+      background: conic-gradient(
+        from 180deg,
+        rgba(255,80,120,.25),
+        rgba(255,160,190,.15),
+        rgba(255,80,120,.25)
+      );
       filter: blur(160px);
       animation: glowMove 30s linear infinite;
       z-index: 0;
@@ -166,27 +171,65 @@
       margin-bottom: 10px;
     }
 
-    /* BIG HEART */
-    .big-heart {
+    /* SPECIAL CARD */
+    .special-card {
+      background: linear-gradient(180deg,
+        rgba(255,255,255,.22),
+        rgba(255,255,255,.08));
       position: relative;
-      width: 220px;
-      height: 220px;
+      overflow: hidden;
+    }
+
+    .special-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top,
+        rgba(255,140,180,.35), transparent 60%);
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .hint {
+      font-size: 15px;
+      opacity: .8;
+      margin-bottom: 20px;
+    }
+
+    /* PROGRESS */
+    .progress {
+      width: 100%;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.2);
+      overflow: hidden;
+      margin: 22px 0 30px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff4d6d, #ffd1dc);
+      border-radius: 999px;
+      transition: width .4s ease;
+      box-shadow: 0 0 20px rgba(255,90,130,.9);
+    }
+
+        /* BIG EMOJI HEART */
+    .big-emoji {
+      font-size: 160px;
+      line-height: 1;
       margin: 36px auto;
-      transform: rotate(45deg) scale(.7);
       opacity: 0;
+      transform: scale(.6);
       transition: all .9s cubic-bezier(.2,.8,.3,1);
       filter: drop-shadow(0 30px 80px rgba(255,90,130,.9));
+      user-select: none;
     }
 
-    .big-heart.show {
+    .big-emoji.show {
       opacity: 1;
-      transform: rotate(45deg) scale(1);
-    }
-
-    .big-heart,
-    .big-heart::before,
-    .big-heart::after {
-      background: linear-gradient(135deg, #ff4d6d, #ffd1dc);
+      transform: scale(1);
     }
 
     .big-heart::before,
@@ -201,12 +244,21 @@
     .big-heart::before { top: -110px; left: 0; }
     .big-heart::after { left: -110px; top: 0; }
 
+    /* SECRET */
     .secret {
       text-align: center;
       font-size: 21px;
-      margin-top: 36px;
+      margin-top: 30px;
       opacity: 0;
       transition: opacity 1.2s ease;
+      line-height: 1.6;
+    }
+
+    .secret-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      display: block;
+      margin-bottom: 10px;
     }
 
     .secret.show { opacity: 1; }
@@ -237,17 +289,27 @@
   <header>
     <div>
       <h1>Жаным, это для тебя ❤️</h1>
-      <p class="subtitle">Каждый клик — это моё чувство к тебе</p>
+      <p class="subtitle">Каждый клик - это моё чувство к тебе</p>
       <div class="type" id="type"></div>
     </div>
   </header>
 
   <section>
-    <div class="card" style="text-align:center">
+    <div class="card special-card" style="text-align:center">
       <h2>Собери моё сердце</h2>
-      <p>Нажми на экран 10 раз</p>
-      <div class="big-heart" id="bigHeart"></div>
-      <div class="secret" id="secret">Я люблю тебя, Жаным. Ты — самое ценное, что есть в моей жизни ❤️</div>
+      <p class="hint">Каждый клик - шаг навстречу любви</p>
+
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="big-emoji" id="bigHeart">❤️</div>
+
+      <div class="secret" id="secret">
+        <span class="secret-title">Моё признание</span><br>
+        Я люблю тебя, Жаным.<br>
+        Ты - самое тёплое и ценное, что есть в моей жизни ❤️
+      </div>
     </div>
   </section>
 
@@ -256,8 +318,26 @@
   </footer>
 
   <script>
-    /* BACKGROUND HEARTS */
+    // ===== Runtime sanity checks (lightweight “tests”) =====
+    function assert(condition, message) {
+      if (!condition) {
+        throw new Error('Test failed: ' + message);
+      }
+    }
+
     const bg = document.getElementById('heartsBg');
+    const typeEl = document.getElementById('type');
+    const bigHeart = document.getElementById('bigHeart');
+    const secret = document.getElementById('secret');
+    const progressBar = document.getElementById('progressBar');
+
+    assert(bg, '#heartsBg должен существовать');
+    assert(typeEl, '#type должен существовать');
+    assert(bigHeart, '#bigHeart должен существовать');
+    assert(secret, '#secret должен существовать');
+    assert(progressBar, '#progressBar должен существовать');
+
+    // ===== Background floating hearts =====
     for (let i = 0; i < 32; i++) {
       const h = document.createElement('div');
       h.className = 'bg-heart';
@@ -267,21 +347,19 @@
       bg.appendChild(h);
     }
 
-    /* TYPEWRITER */
-    const text = 'Я долго думал, как сказать тебе это... Томирис, ты — моё вдохновение, мой покой и моя любовь.';
-    let i = 0;
-    const typeEl = document.getElementById('type');
+    // ===== Typewriter =====
+    const text = 'Я долго думал, как сказать тебе это... Жаным, ты - моё вдохновение, мой покой и моя любовь.';
+    let idx = 0;
+
     (function type() {
-      if (i < text.length) {
-        typeEl.textContent += text.charAt(i++);
+      if (idx < text.length) {
+        typeEl.textContent += text.charAt(idx++);
         setTimeout(type, 55);
       }
     })();
 
-    /* CLICK HEARTS + COUNTER */
+    // ===== Click hearts + progress + reveal =====
     let taps = 0;
-    const bigHeart = document.getElementById('bigHeart');
-    const secret = document.getElementById('secret');
 
     function tapHeart(x, y) {
       const heart = document.createElement('div');
@@ -292,17 +370,28 @@
       setTimeout(() => heart.remove(), 1400);
 
       taps++;
+      const progress = Math.min((taps / 10) * 100, 100);
+      progressBar.style.width = progress + '%';
+
       if (taps >= 10) {
         bigHeart.classList.add('show');
         secret.classList.add('show');
       }
     }
 
-    document.addEventListener('click', e => tapHeart(e.clientX, e.clientY));
-    document.addEventListener('touchstart', e => {
+    // Additional behavioral tests
+    (function runTests() {
+      const before = taps;
+      tapHeart(-9999, -9999); // off-screen
+      assert(taps === before + 1, 'tapHeart должен увеличивать счётчик на 1');
+      // cleanup: don’t keep test heart visible (it’s off-screen anyway)
+    })();
+
+    document.addEventListener('click', (e) => tapHeart(e.clientX, e.clientY));
+    document.addEventListener('touchstart', (e) => {
       const t = e.touches[0];
       tapHeart(t.clientX, t.clientY);
-    });
+    }, { passive: true });
   </script>
 
 </body>
