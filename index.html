@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Для Жаным ❤️</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(255,120,150,.35), transparent 40%),
+        radial-gradient(circle at 90% 30%, rgba(255,80,120,.35), transparent 45%),
+        radial-gradient(circle at 50% 90%, rgba(255,160,190,.25), transparent 40%),
+        linear-gradient(180deg, #12000f, #050008);
+    }
+
+    /* AURORA GLOW */
+    .glow {
+      position: fixed;
+      inset: -40%;
+      background: conic-gradient(from 180deg, rgba(255,80,120,.25), rgba(255,160,190,.15), rgba(255,80,120,.25));
+      filter: blur(160px);
+      animation: glowMove 30s linear infinite;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    @keyframes glowMove {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* FLOATING HEARTS */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-heart {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: linear-gradient(135deg, #ff4d6d, #ff9ab3);
+      transform: rotate(45deg);
+      animation: float 18s linear infinite;
+      opacity: .45;
+      filter: drop-shadow(0 0 10px rgba(255,100,140,.9));
+    }
+
+    .bg-heart::before,
+    .bg-heart::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: linear-gradient(135deg, #ff4d6d, #ff9ab3);
+      border-radius: 50%;
+    }
+
+    .bg-heart::before { top: -8px; left: 0; }
+    .bg-heart::after { left: -8px; top: 0; }
+
+    @keyframes float {
+      0% { transform: translateY(120vh) rotate(45deg); opacity: 0; }
+      20% { opacity: .45; }
+      100% { transform: translateY(-140vh) rotate(45deg); opacity: 0; }
+    }
+
+    /* TAP HEART */
+    .tap-heart {
+      position: fixed;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #ff4d6d, #ffc1d1);
+      transform: translate(-50%, -50%) rotate(45deg);
+      animation: pop 1.4s cubic-bezier(.2,.8,.3,1) forwards;
+      pointer-events: none;
+      z-index: 999;
+      filter: drop-shadow(0 18px 40px rgba(255,90,130,1));
+    }
+
+    .tap-heart::before,
+    .tap-heart::after {
+      content: '';
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #ff4d6d, #ffc1d1);
+      border-radius: 50%;
+    }
+
+    .tap-heart::before { top: -18px; left: 0; }
+    .tap-heart::after { left: -18px; top: 0; }
+
+    @keyframes pop {
+      0% { transform: translate(-50%, -50%) scale(.2) rotate(45deg); opacity: 0; }
+      30% { opacity: 1; }
+      70% { transform: translate(-50%, -120%) scale(1.5) rotate(45deg); }
+      100% { transform: translate(-50%, -200%) scale(.9) rotate(45deg); opacity: 0; }
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      padding: 24px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 7vw, 82px);
+      margin-bottom: 14px;
+      text-shadow: 0 20px 60px rgba(255,90,130,.65);
+    }
+
+    .subtitle {
+      font-size: 17px;
+      opacity: .9;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .type {
+      margin-top: 28px;
+      font-size: 19px;
+      line-height: 1.7;
+      min-height: 3.2em;
+      opacity: .95;
+    }
+
+    section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 90px 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      padding: 44px;
+      margin-bottom: 44px;
+      box-shadow: 0 40px 120px rgba(0,0,0,.6);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    /* BIG HEART */
+    .big-heart {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      margin: 36px auto;
+      transform: rotate(45deg) scale(.7);
+      opacity: 0;
+      transition: all .9s cubic-bezier(.2,.8,.3,1);
+      filter: drop-shadow(0 30px 80px rgba(255,90,130,.9));
+    }
+
+    .big-heart.show {
+      opacity: 1;
+      transform: rotate(45deg) scale(1);
+    }
+
+    .big-heart,
+    .big-heart::before,
+    .big-heart::after {
+      background: linear-gradient(135deg, #ff4d6d, #ffd1dc);
+    }
+
+    .big-heart::before,
+    .big-heart::after {
+      content: '';
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+    }
+
+    .big-heart::before { top: -110px; left: 0; }
+    .big-heart::after { left: -110px; top: 0; }
+
+    .secret {
+      text-align: center;
+      font-size: 21px;
+      margin-top: 36px;
+      opacity: 0;
+      transition: opacity 1.2s ease;
+    }
+
+    .secret.show { opacity: 1; }
+
+    footer {
+      text-align: center;
+      padding: 60px 20px 80px;
+      opacity: .65;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 30px; border-radius: 26px; }
+      .type { font-size: 16px; }
+      .big-heart { width: 170px; height: 170px; }
+      .big-heart::before,
+      .big-heart::after { width: 170px; height: 170px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow"></div>
+  <div class="hearts-bg" id="heartsBg"></div>
+
+  <header>
+    <div>
+      <h1>Жаным, это для тебя ❤️</h1>
+      <p class="subtitle">Каждый клик — это моё чувство к тебе</p>
+      <div class="type" id="type"></div>
+    </div>
+  </header>
+
+  <section>
+    <div class="card" style="text-align:center">
+      <h2>Собери моё сердце</h2>
+      <p>Нажми на экран 10 раз</p>
+      <div class="big-heart" id="bigHeart"></div>
+      <div class="secret" id="secret">Я люблю тебя, Жаным. Ты — самое ценное, что есть в моей жизни ❤️</div>
+    </div>
+  </section>
+
+  <footer>
+    Сделано с любовью специально для Жаным
+  </footer>
+
+  <script>
+    /* BACKGROUND HEARTS */
+    const bg = document.getElementById('heartsBg');
+    for (let i = 0; i < 32; i++) {
+      const h = document.createElement('div');
+      h.className = 'bg-heart';
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.animationDelay = Math.random() * 14 + 's';
+      h.style.animationDuration = 12 + Math.random() * 12 + 's';
+      bg.appendChild(h);
+    }
+
+    /* TYPEWRITER */
+    const text = 'Я долго думал, как сказать тебе это... Томирис, ты — моё вдохновение, мой покой и моя любовь.';
+    let i = 0;
+    const typeEl = document.getElementById('type');
+    (function type() {
+      if (i < text.length) {
+        typeEl.textContent += text.charAt(i++);
+        setTimeout(type, 55);
+      }
+    })();
+
+    /* CLICK HEARTS + COUNTER */
+    let taps = 0;
+    const bigHeart = document.getElementById('bigHeart');
+    const secret = document.getElementById('secret');
+
+    function tapHeart(x, y) {
+      const heart = document.createElement('div');
+      heart.className = 'tap-heart';
+      heart.style.left = x + 'px';
+      heart.style.top = y + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1400);
+
+      taps++;
+      if (taps >= 10) {
+        bigHeart.classList.add('show');
+        secret.classList.add('show');
+      }
+    }
+
+    document.addEventListener('click', e => tapHeart(e.clientX, e.clientY));
+    document.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      tapHeart(t.clientX, t.clientY);
+    });
+  </script>
+
+</body>
+</html>
